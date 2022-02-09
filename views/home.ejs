@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <title>ToDo List</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+
+<body>
+    <section id="main-container">
+        <h1 class="text-color"  id="app-title">TODO App</h1>
+        <div class="horizontal-line"></div>
+        <form action="/action/create-task" method="POST">
+            <div id="desc-div">
+                <label for="desc-input"> description </label>
+                <input type="text" name="description" id="desc-input" placeholder="What do you need to do ?" required>
+            </div>
+            
+            <div class="horizontal-line"></div>
+            <div id="data-div">
+                <div id="category-div">
+                    <label for="category"> Category </label>
+
+                    <select name="category" id="category">
+                        <option value="n/a"> Choose a category </option>
+                        <option value="personal">Personal</option>
+                        <option value="work">Work</option>
+                        <option value="school">School</option>
+                        <option value="cleaning">Cleaning</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="vertical-line"></div>
+                <div id="date-div">
+                    <div>
+                        <label for="date"> Due Date </label>
+                        <input type="date" id="date" name="date">
+                    </div>
+                </div>
+            </div>
+            <div class="horizontal-line"></div>
+            <div id="action-buttons">
+                <button id="add-button" type="submit"> 
+                    <i class="fas fa-plus"></i>
+                    <span>Add Task</span> 
+                </button>
+
+                <button id="delete-button" type="submit" form="tasks-list-form">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Delete Tasks</span>
+                </button>
+            </div>
+
+        </form>
+        <form action="/action/delete-tasks" method="POST" id="tasks-list-form">
+            <% for(let i of task_list){%>
+                <div>
+                    <div class="horizontal-line"></div>
+                    <div class="task">
+                        <input id="check" type="checkbox" name="id" value="<%= i.id %>" >
+                        <div class="task-data">
+                            <p> <%= i.description %> </p>
+                            <i class="fas fa-calendar-alt"></i>
+                            <span> <%= i.date %> </span>
+                        </div>
+                        <button type="button" style="background-color: <%= color_list[i.category] %>;"> <%= i.category %> </button>
+                    </div>
+                </div>
+            <%}%>
+
+            </form>
+    </section>
+
+
+    <script type="text/javascript">
+        var tasks = document.getElementsByClassName('task');
+
+for(let i of tasks){
+  // To apply line-through style to text when checkbox is clicked
+    i.getElementsByTagName('input')[0].addEventListener('change', function() {
+        if (this.checked) {
+          i.getElementsByTagName('p')[0].style.textDecoration = 'line-through';
+          i.getElementsByTagName('span')[0].style.textDecoration = 'line-through';
+        } else {
+            i.getElementsByTagName('p')[0].style.textDecoration = 'none';
+            i.getElementsByTagName('span')[0].style.textDecoration = 'none';
+        }
+      });
+
+      // Show alert dialog with information
+    i.getElementsByTagName('button')[0].addEventListener('click', function(){
+        let res;
+        res = "Task : " + i.getElementsByTagName('p')[0].innerText + "\n" +
+              "Deadline : " + i.getElementsByTagName('span')[0].innerText + "\n" +
+              "Category : " + this.innerText;
+        window.alert(res);
+    });
+}
+
+
+
+    </script>
+    
+</body>
+
+</html>
